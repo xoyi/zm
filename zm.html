@@ -1,0 +1,108 @@
+<html>
+  <head>
+    <title>小程序转码</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <script>window.onerror = e => {console.error(e)}</script>
+    <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/2.4.1/weui.min.css"></link>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    <script src="https://res.wx.qq.com/open/js/cloudbase/1.1.0/cloud.js"></script>
+    <script src="https://mat1.gtimg.com/www/asset/lib/jquery/jquery/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/layer/3.5.1/layer.min.js"></script>
+    <script>
+      function docReady(fn) {
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+          fn()
+        } else {
+          document.addEventListener('DOMContentLoaded', fn);
+        }
+      }
+      $(function (){
+          var ua = navigator.userAgent.toLowerCase()
+          var isWXWork = ua.match(/wxwork/i) == 'wxwork'
+          var isWeixin = !isWXWork && ua.match(/micromessenger/i) == 'micromessenger'
+          if(isWeixin){
+                const btn=$('#launch-btn');
+                btn.attr("username",'gh_45b306365c3d');
+                btn.attr("path",'pages/index/index.html');
+                layer.msg('点击下面按钮跳转小程序', {icon: 1});
+              }else{
+                $("#bd").hide();
+                layer.msg(data.msg, {icon: 2});
+              }
+      })
+      function openwx(){
+        var containerEl = document.getElementById('desktop-web-container')
+        containerEl.classList.remove('hidden')
+        containerEl.classList.add('full', 'desktop-web-container')
+        layer.confirm('请复制URL到手机微信打开', {
+          btn: ['复制'] //按钮
+        }, function(){
+          var url = window.location.href;
+          copyUrl(url);
+          layer.msg('复制成功，正在打开微信', {icon: 1});
+          setTimeout(function (){window.location.href="weixin://"},1000)
+        });
+      }
+      function copyUrl(id) {
+        $("body").after("<input id='copyVal'></input>");
+        var text = id;
+        var input = document.getElementById("copyVal");
+        input.value = text;
+        input.select();
+        input.setSelectionRange(0, input.value.length);
+        document.execCommand("copy");
+        $("#copyVal").remove();
+      }
+      docReady(async function() {
+        var ua = navigator.userAgent.toLowerCase()
+        var isWXWork = ua.match(/wxwork/i) == 'wxwork'
+        var isWeixin = !isWXWork && ua.match(/micromessenger/i) == 'micromessenger'
+        if (isWeixin) {
+          var containerEl = document.getElementById('wechat-web-container')
+          containerEl.classList.remove('hidden')
+          containerEl.classList.add('full', 'wechat-web-container')
+          var launchBtn = document.getElementById('launch-btn')
+          launchBtn.addEventListener('ready', function (e) {})
+          launchBtn.addEventListener('launch', function (e) {})
+          launchBtn.addEventListener('error', function (e) {})
+          wx.config({
+            appId: 'wxf4932f0ad558fc38',
+            timestamp: 0,
+            nonceStr: 'nonceStr',
+            signature: 'signature',
+            jsApiList: ['chooseImage'],
+            openTagList:['wx-open-launch-weapp'],
+          })
+	  console.log(123)
+        } else{
+		console.log(445)
+          openwx();
+        }
+      })
+    </script>
+    <style>
+      .hidden{display:none}
+      .full{position:absolute;top:0;bottom:0;left:0;right:0}
+      .public-web-container p{position:absolute;top:40%}
+      .public-web-container a{position:absolute;bottom:40%}
+      .wechat-web-container p{position:absolute;top:40%}
+      .wechat-web-container wx-open-launch-weapp{position:absolute;bottom:40%;left:0;right:0;display:flex;flex-direction:column;align-items:center}
+      .desktop-web-container p{position:absolute;top:40%}
+    </style>
+  </head>
+  <body>
+    <div class="page full" id="bd">
+      <div id="wechat-web-container" class="hidden">
+        <wx-open-launch-weapp id="launch-btn" username="gh_979d9ceb7fde" path="pages/index/index?invite=1&userid=&amp;ald_share_src=422b7e9ec108b2aae17505f322a974e2"> <!-- replace -->
+          <template>
+            <button style="width: 200px; height: 45px; text-align: center; font-size: 17px; display: block; margin: 0 auto; padding: 8px 24px; border: none; border-radius: 4px; background-color: #07c160; color:#fff;">打开小程序</button>
+          </template>
+        </wx-open-launch-weapp>
+      </div>
+      <div id="desktop-web-container" class="hidden" style="align-content: center">
+        <button onclick="openwx()" style="position:absolute;bottom:40%;left:0;right:0;display:flex;flex-direction:column;align-items:center;width: 200px; height: 45px; text-align: center; font-size: 17px; display: block; margin: 0 auto; padding: 8px 24px; border: none; border-radius: 4px; background-color: #07c160; color:#fff;">打开微信</button>
+      </div>
+    </div>
+  </body>
+</html>
